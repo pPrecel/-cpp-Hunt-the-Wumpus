@@ -20,9 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{B6611E24-DB3B-48D4-B97B-8692E1BA7F40}</ProjectGuid>
+    <ProjectGuid>{6E046462-518E-4F85-AB57-E574787417FF}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>HuntTheHumpus</RootNamespace>
+    <RootNamespace>HuntTheWumpus</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />

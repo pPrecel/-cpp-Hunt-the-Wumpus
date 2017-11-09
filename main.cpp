@@ -20,13 +20,13 @@ namespace map {
 		Room* adjoing_3;
 		RoomState state;
 	public:
-		Room(){}
+		Room() {}
 		Room(const int& n, const RoomState& rs = nothing, Room* r1 = nullptr, Room* r2 = nullptr, Room* r3 = nullptr)
 			: number{ n }, state{ rs }, adjoing_1{ r1 }, adjoing_2{ r2 }, adjoing_3{ r3 } {}
 
 		Room* find(int i) {
 			Room* tmp = this;
-			while(tmp->number != i) tmp = closer_room(i, tmp->adjoing_1, tmp->adjoing_2, tmp->adjoing_3);
+			while (tmp->number != i) tmp = closer_room(i, tmp->adjoing_1, tmp->adjoing_2, tmp->adjoing_3);
 			return tmp;
 		}
 
@@ -41,26 +41,26 @@ namespace map {
 		void print_debugger() {
 			Room* map = this;
 			std::cout << "          Map" << std::endl;
-			std::cout << "       ----1----" << std::endl;
+			std::cout << "       ____1____" << std::endl;
 			std::cout << "      /    |    \\" << std::endl;
-			std::cout << "     /   --8--   \\" << std::endl;
+			std::cout << "     /   __8__   \\" << std::endl;
 			std::cout << "   _/   /     \\   \\_" << std::endl;
 			std::cout << "  /    7        9   \\" << std::endl;
 			std::cout << " /    / \\      / \\   \\" << std::endl;
-			std::cout << " 5---6   17--18   10--2" << std::endl;
+			std::cout << " 5ÄÄÄ6   17ÄÄ18   10ÄÄ2" << std::endl;
 			std::cout << " |   |   /    \\    |  |" << std::endl;
-			std::cout << " |   15--16   19--11  |" << std::endl;
+			std::cout << " |   15ÄÄ16   19ÄÄ11  |" << std::endl;
 			std::cout << " |   |   \\    /    |  |" << std::endl;
 			std::cout << " \\   \\     20     /   /" << std::endl;
 			std::cout << "  \\   14    |   12   /" << std::endl;
-			std::cout << "   \\ /  \\--13---/ \\ /" << std::endl;
-			std::cout << "    4--------------3" << std::endl << std::endl;
+			std::cout << "   \\ / ÀÄÄÄ13ÄÄÄÙ \\ /" << std::endl;
+			std::cout << "    4ÄÄÄÄÄÄÄÄÄÄÄÄÄÄ3" << std::endl << std::endl;
 
 			for (int i = 1; i <= 20; i++) {
 				std::cout << "Room " << i << ": ";
 				map = map->find(i);
 				if (map->state == 0) std::cout << "nothing" << std::endl;
-				else if(map->state == 1) std::cout << "monster" << std::endl;
+				else if (map->state == 1) std::cout << "monster" << std::endl;
 				else if (map->state == 2) std::cout << "catapult" << std::endl;
 				else if (map->state == 3) std::cout << "player" << std::endl;
 				else if (map->state == 4) std::cout << "hole" << std::endl;
@@ -71,10 +71,10 @@ namespace map {
 			if (this->adjoing_1->number != to && this->adjoing_2->number != to && this->adjoing_3->number != to) return this;
 
 			Room* nextRoom = this->find(to);
-			
+
 			if (nextRoom->state == nothing) {
 
-				if(this->state != catapult)
+				if (this->state != catapult)
 					this->state = nothing;
 				nextRoom->state = player;
 
@@ -117,7 +117,7 @@ namespace map {
 
 			int flag = 20;
 
-			do{
+			do {
 				int way = (rand() % 3) + 1;
 				if (way == 1 && (monsterPos->adjoing_1->state == nothing || monsterPos->adjoing_1->state == player)) {
 					if (monsterPos->adjoing_1->state == player) return nullptr;
@@ -231,10 +231,12 @@ namespace map {
 
 		for (int i = 0; i != howMany; i++) {
 			int random;
-			do{ 
-				random = (rand() % 20) +1; 
+			do {
+				random = (rand() % 20) + 1;
 				room = room->find(random);
-			} while (room->state != 0);
+
+				if (!(room->adjoing_1->state == nothing || room->adjoing_2->state == nothing || room->adjoing_3->state == nothing)) continue;
+			} while (room->state != nothing);
 			room->state = newState;
 		}
 		return room;
@@ -251,7 +253,7 @@ namespace map {
 	}
 
 	bool check_randomer(Room* room) {
-		if (room->adjoing_1->state == nothing || room->adjoing_2->state == nothing || room->adjoing_3->state == nothing) return true;		
+		if (room->adjoing_1->state == nothing || room->adjoing_2->state == nothing || room->adjoing_3->state == nothing) return true;
 		return false;
 	}
 }
@@ -266,8 +268,8 @@ namespace game_engine {
 
 	void greeting() {
 		std::cout << "Witaj poszukiwaczu!" << std::endl;
-		std::cout << "Polowanie na Humpusa zawiodlo Cie do ciemnej pieczary potwora." << std::endl;
-		std::cout << "Niestety, spadaj¹c z urwiska, usiad³eœ na strza³ach i pochodni, przez co, w totalnej, majac jedynie 5 strzal, musisz upolowac Humpusa." << std::endl;
+		std::cout << "Polowanie na Wumpusa zawiodlo Cie do ciemnej pieczary potwora." << std::endl;
+		std::cout << "Niestety, spadaj¹c z urwiska, usiad³eœ na strza³ach i pochodni, przez co, w totalnej, majac jedynie 5 strzal, musisz upolowac Wumpusa." << std::endl;
 		std::cout << "Kazda strzala moze przeleciec przez trzy komnaty. Wystarczy jeden celny strzal, by ubic bestie! Sptrzelanie wykonuje sie poprzez podanie litery s,"
 			<< " oraz trzech komnat, oddzielonych myslnikami." << std::endl;
 		std::cout << "Pamietaj jednak, ze kazdorazowy strzal sprawia, ze potwor przechodzi do losowej komory, znajdujacej sie obok." << std::endl;
@@ -291,9 +293,9 @@ namespace game_engine {
 			if (text.length() < 2 || text.length() > 3) return false;
 
 			if (text[1] < 48 || text[1] > 57) return false;
-			else if(text[2] != '\0' && (text[2] < 48 || text[2] > 57)) return false;
+			else if (text[2] != '\0' && (text[2] < 48 || text[2] > 57)) return false;
 			return true;
-		}		
+		}
 		else if (text[0] == 's') {
 			if (text.length() < 6 || text.length() > 9) return false;
 
@@ -348,8 +350,8 @@ namespace game_engine {
 			container.thiRoom = NULL;
 			return true;
 		}
-		
-		if (move == 's') {	
+
+		if (move == 's') {
 			int lastDash;
 			int firRoom, secRoom, thiRoom;
 
@@ -409,14 +411,15 @@ namespace game_engine {
 		greeting();
 
 		map::Room* map = map::map_generator();
-		map::Room* monsterPos = map::random_states(map, 1, map::monster);
-		map::Room* playerPos = map::random_states(map, 1, map::player);
 		map::random_states(map, 4, map::catapult);
 		map::random_states(map, 4, map::hole);
+		map::Room* monsterPos = map::random_states(map, 1, map::monster);
+		map::Room* playerPos = map::random_states(map, 1, map::player);
 
-		
+
+
 		int playerArrows = 5;
-		
+
 		CommandContainer commands;
 		bool endingFlag = false;
 
@@ -436,7 +439,7 @@ namespace game_engine {
 			}
 			else if (commands.step == 's' && playerArrows != 0) {
 				if (playerPos->shot(commands.firRoom, commands.secRoom, commands.thiRoom)) {
-					if (playerPos->is_monster(commands.firRoom) || playerPos->is_monster(commands.secRoom) || playerPos->is_monster(commands.thiRoom)){
+					if (playerPos->is_monster(commands.firRoom) || playerPos->is_monster(commands.secRoom) || playerPos->is_monster(commands.thiRoom)) {
 						std::cout << "Pokonales potwora! Gratulacje!" << std::endl << std::endl << std::endl;
 						endingFlag = true;
 					}
@@ -463,7 +466,7 @@ namespace game_engine {
 }
 
 int main() {
-	
+
 	game_engine::main_engine();
 	return 0;
 }
